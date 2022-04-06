@@ -48,14 +48,12 @@ auth.interceptors.response.use(
                 }
               )
 
-              auth.defaults.headers.common['Authorization'] = `Bearer ${token}`
-
               failedRequestQueue.forEach(request => request.onSuccess(token))
               failedRequestQueue = []
             })
-            .catch(errorRefreshToken => {
+            .catch((errorRefreshToken: AxiosError) => {
               failedRequestQueue.forEach(request =>
-                request.onSuccess(errorRefreshToken)
+                request.onFailure(errorRefreshToken)
               )
               failedRequestQueue = []
             })
